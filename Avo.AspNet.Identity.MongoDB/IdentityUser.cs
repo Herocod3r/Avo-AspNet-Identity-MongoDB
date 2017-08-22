@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNet.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace Avo.AspNet.Identity.MongoDB
 {
@@ -13,8 +14,7 @@ namespace Avo.AspNet.Identity.MongoDB
             UserName = username;
         }
 
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
+        [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
         public string Id { get; set; }
         public string UserName { get; set; }
         public virtual string PasswordHash { get; set; }
