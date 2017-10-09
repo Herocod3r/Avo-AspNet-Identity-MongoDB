@@ -21,7 +21,7 @@ namespace Avo.AspNet.Identity.MongoDB
         IUserLoginStore<TUser>,
         IUserPasswordStore<TUser, string>,
         IUserLockoutStore<TUser, string>,
-        IUserTwoFactorStore<TUser, string>
+        IUserTwoFactorStore<TUser, string>, IUserRoleStore<TUser>
         where TUser : IdentityUser
     {
         private readonly IMongoCollection<TUser> _userCollection;
@@ -212,6 +212,26 @@ namespace Avo.AspNet.Identity.MongoDB
         public virtual void Dispose()
         {
             
+        }
+
+        public Task AddToRoleAsync(TUser user, string roleName)
+        {
+            return Task.Run(() => user.Roles.Add(roleName));
+        }
+
+        public Task RemoveFromRoleAsync(TUser user, string roleName)
+        {
+            return Task.Run(() => user.Roles.Remove(roleName));
+        }
+
+        public Task<IList<string>> GetRolesAsync(TUser user)
+        {
+            return Task.Run(() => (IList<string>)user.Roles);
+        }
+
+        public Task<bool> IsInRoleAsync(TUser user, string roleName)
+        {
+            return Task.Run(() => user.Roles.Contains(roleName));
         }
     }
 }
